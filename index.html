@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>环境学概论 · 背诵卡</title>
+<meta name="description" content="加密的背诵卡站点。">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#f4f1e8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14181a" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="环境背诵卡">
+<meta name="format-detection" content="telephone=no">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="lock" id="lock">
+  <form class="lock-card" id="lock-form" autocomplete="off">
+    <div class="lock-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="10" width="16" height="11" rx="2.5"></rect>
+        <path d="M8 10V7.5a4 4 0 0 1 8 0V10"></path>
+        <circle cx="12" cy="15.4" r="1.4" fill="currentColor" stroke="none"></circle>
+      </svg>
+    </div>
+    <h1>环境学概论 · 背诵卡</h1>
+    <p class="lock-sub">题目与答案已加密，需要密码才能查看</p>
+
+    <label class="sr-only" for="lock-password">密码</label>
+    <input id="lock-password" class="lock-input" type="password" name="password"
+           placeholder="请输入密码" autocomplete="current-password" autocapitalize="off"
+           autocorrect="off" spellcheck="false" required>
+
+    <div class="lock-row">
+      <label class="lock-check"><input type="checkbox" id="lock-remember"> 本机记住 30 天</label>
+      <label class="lock-check"><input type="checkbox" id="lock-toggle"> 显示密码</label>
+    </div>
+
+    <button type="submit" class="btn primary lock-btn" id="lock-submit">解锁</button>
+    <p class="lock-error" id="lock-error" role="alert"></p>
+    <p class="lock-foot">页面里只有密文，密码不会被上传</p>
+  </form>
+</div>
+
+<div class="app" id="app" hidden>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">环</span>
+      <div class="brand-text">
+        <h1>环境学概论 · 背诵卡</h1>
+        <p>第2版 · 曲向荣主编　|　6 个名词 + 11 道简答，答案均标教材页码</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <div class="progress" title="已掌握 / 全部">
+        <div class="progress-bar"><span id="bar"></span></div>
+        <span id="pcount">0 / 17</span>
+      </div>
+      <button type="button" class="icon-btn" id="btn-index">目录</button>
+    </div>
+  </header>
+
+  <nav class="filters" aria-label="筛选">
+    <button type="button" class="chip active" data-filter="all">全部 17</button>
+    <button type="button" class="chip" data-filter="term">名词解释 6</button>
+    <button type="button" class="chip" data-filter="qa">简答 11</button>
+    <button type="button" class="chip" data-filter="todo">未掌握</button>
+    <span class="kbd-hint">空格 翻面　← → 切换　M 已掌握</span>
+    <button type="button" class="chip ghost" id="btn-shuffle" title="随机顺序（S）">乱序</button>
+  </nav>
+
+  <main class="stage">
+    <section class="card" id="card" tabindex="0" aria-live="polite" aria-label="背诵卡片">
+      <div class="card-head">
+        <span class="badge" id="badge">名词解释</span>
+        <span class="counter" id="counter">1 / 17</span>
+      </div>
+
+      <h2 class="question" id="question"></h2>
+      <p class="hint" id="hint">点击卡片或按空格，查看答案</p>
+
+      <div class="answer" id="answer" hidden>
+        <div class="notice" id="notice" hidden></div>
+        <ol class="points" id="points"></ol>
+        <details class="quote-box">
+          <summary>书中原文（可直接引用）</summary>
+          <blockquote id="quote"></blockquote>
+        </details>
+        <div class="cite" id="cite"></div>
+      </div>
+    </section>
+
+    <div class="mnemonic" id="mnemonic-box" hidden></div>
+
+    <p class="swipe-tip">← 左右滑动切题 →</p>
+  </main>
+
+  <footer class="controls" aria-label="操作">
+    <button type="button" class="btn" id="btn-prev">← 上一题</button>
+    <button type="button" class="btn primary" id="btn-reveal">显示答案</button>
+    <button type="button" class="btn" id="btn-next">下一题 →</button>
+    <button type="button" class="btn ghost" id="btn-master" aria-pressed="false">标记已掌握 (M)</button>
+    <button type="button" class="btn subtle btn-reset-bar" id="btn-reset">重置</button>
+  </footer>
+</div>
+
+<div class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-label="全部卡片">
+  <div class="drawer-panel">
+    <div class="drawer-head">
+      <h3>全部卡片</h3>
+      <button type="button" class="icon-btn" id="drawer-close">关闭</button>
+    </div>
+    <div class="index-list" id="index-list"></div>
+    <div class="drawer-foot">
+      <p class="install-tip">想当 App 用：iPhone 用 Safari「分享 → 添加到主屏幕」；安卓用 Chrome 菜单「安装应用 / 添加到主屏幕」。解锁一次后，本机可记住 30 天。</p>
+      <button type="button" class="btn subtle" id="btn-reset-drawer">清空背诵进度</button>
+    </div>
+  </div>
+</div>
+
+<script src="secure-data.js"></script>
+<script src="app.js"></script>
+<script>
+  if ("serviceWorker" in navigator && location.protocol !== "file:") {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () {});
+    });
+  }
+</script>
+</body>
+</html>
